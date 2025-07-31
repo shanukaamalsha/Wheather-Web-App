@@ -47,8 +47,10 @@ Follow these steps to run the project locally on your machine.
 
 > git clone [https://github.com/your-username/weather-app.git](https://github.com/shanukaamalsha/Wheather-Web-App)
 
-### ⚙️ 3. Replace .env file
-In the .env file in the root directory of the project add your OpenWeather API key:
+### ⚙️ 3. Create .env file
+In the root directory of the project, create a file named .env and add your OpenWeather API key:
+
+>OPENWEATHER_API_KEY=your_actual_api_key_here
 
 ### 📥 4. Install Dependencies
 Install backend dependencies using:
