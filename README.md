@@ -81,3 +81,11 @@ The API key stored in the .env file can be exposed if the backend is not properl
 ### 📬 Contributions
 Feel free to fork the project and contribute improvements, UI enhancements, or API expansions!
 
+## Stay Connected
+
+- 🔗 **Live Project:** https://weather-app-production-d0fe.up.railway.app/
+- 🌐 **Infosphere Site:** https://infosphere-nexus.netlify.app/ 
+- 👤 **Facebook:** https://www.facebook.com/share/1C55BHgCG7/
+- ▶️ **YouTube Channel:** https://www.youtube.com/@infosphere_nexus
+
+
