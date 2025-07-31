@@ -61,15 +61,15 @@ Install backend dependencies using:
 
 Once started, the backend will run on:
 
-> http://localhost:3000
+> http://localhost: 3000
 
 ### 🌐 6. Open the Frontend
 To view the UI:
 
 Open index.html in your browser via Live Server (recommended), or
-Just simply go to the url:
+Just simply go to the url in your browser:
 
-> http://localhost:3000/ (or relevant port)
+> http://localhost: 3000 (or relevant port)
 
 ### ⚠️ Note
 Please do not host this project as-is without securing the backend.
