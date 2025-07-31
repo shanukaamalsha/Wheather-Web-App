@@ -45,7 +45,6 @@ Follow these steps to run the project locally on your machine.
 
 ### 📦 2. Clone the Repository
 
-```bash
 git clone https://github.com/your-username/weather-app.git
 
 ### ⚙️ 3. Replace .env file
