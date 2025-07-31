@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        .cloud {
+            width: 100px;
+            height: 30px;
+            background: #fff;
+            border-radius: 20px;
+            position: relative;
+            margin: 80px auto 40px;
+        }
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+        }
+        .cloud::before {
+            width: 40px;
+            height: 40px;
+            top: -20px;
+            left: 10px;
+        }
+        .cloud::after {
+            width: 60px;
+            height: 60px;
+            top: -35px;
+            right: 15px;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center p-4">
+    <div class="relative w-full max-w-4xl">
+        <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl shadow-lg p-6 relative z-10">
+            <form id="searchForm" class="mb-6">
+                <div class="relative">
+                    <input
+                        type="text"
+                        name="city"
+                        placeholder="Search city..."
+                        class="w-full py-2 pl-3 pr-10 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white placeholder-white placeholder-opacity-75 focus:outline-none focus:ring-2 focus:ring-white"
+                    />
+                    <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <div class="cloud animate-float"></div>
+
+            <div id="initialMessage" class="text-center text-white">Please enter a city</div>
+
+            <div id="weatherInfo" class="hidden">
+                <div class="text-center mb-6">
+                    <div id="temperature" class="text-6xl font-bold text-white"></div>
+                    <div id="cityName" class="text-xl text-white mt-2"></div>
+                    <div id="weatherDescription" class="text-lg text-white mt-1"></div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                    <div class="flex items-center bg-white bg-opacity-20 rounded-lg p-3">
+                        <div class="text-white mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white opacity-75">Humidity</div>
+                            <div id="humidity" class="text-lg font-semibold text-white"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center bg-white bg-opacity-20 rounded-lg p-3">
+                        <div class="text-white mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white opacity-75">Wind</div>
+                            <div id="windSpeed" class="text-lg font-semibold text-white"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center bg-white bg-opacity-20 rounded-lg p-3">
+                        <div class="text-white mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white opacity-75">Pressure</div>
+                            <div id="pressure" class="text-lg font-semibold text-white"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center bg-white bg-opacity-20 rounded-lg p-3">
+                        <div class="text-white mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white opacity-75">Cloudiness</div>
+                            <div id="cloudiness" class="text-lg font-semibold text-white"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center bg-white bg-opacity-20 rounded-lg p-3">
+                        <div class="text-white mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white opacity-75">Visibility</div>
+                            <div id="visibility" class="text-lg font-semibold text-white"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="forecast" class="mb-6">
+                    <h2 class="text-xl font-semibold text-white mb-4">5-Day Forecast</h2>
+                    <div id="forecastData" class="grid grid-cols-1 md:grid-cols-5 gap-4"></div>
+                </div>
+
+                <div id="alerts" class="hidden">
+                    <h2 class="text-xl font-semibold text-white mb-4">Weather Alerts</h2>
+                    <div id="alertsData" class="bg-red-500 bg-opacity-20 rounded-lg p-4 text-white"></div>
+                </div>
+            </div>
+            <div id="loading" class="text-center text-white hidden">Loading...</div>
+            <div id="error" class="text-center text-red-500 hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        const WEATHER_API_URL = '/api/weather';
+        const FORECAST_API_URL = '/api/forecast';
+
+        const searchForm = document.getElementById('searchForm');
+        const initialMessage = document.getElementById('initialMessage');
+        const weatherInfo = document.getElementById('weatherInfo');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const city = e.target.elements.city.value;
+            if (city) {
+                await fetchWeatherAndForecast(city);
+            }
+        });
+
+        async function fetchWeatherAndForecast(city) {
+            initialMessage.classList.add('hidden');
+            loading.classList.remove('hidden');
+            error.classList.add('hidden');
+            weatherInfo.classList.add('hidden');
+
+            try {
+                const [weatherData, forecastData] = await Promise.all([
+                    fetch(`${WEATHER_API_URL}?city=${encodeURIComponent(city)}`).then(res => res.json()),
+                    fetch(`${FORECAST_API_URL}?city=${encodeURIComponent(city)}`).then(res => res.json())
+                ]);
+
+                if (weatherData.cod === '404' || forecastData.cod === '404') {
+                    throw new Error('City not found');
+                }
+
+                updateWeatherUI(weatherData);
+                updateForecastUI(forecastData);
+                weatherInfo.classList.remove('hidden');
+            } catch (err) {
+                error.textContent = 'Failed to fetch weather data. Please try again.';
+                error.classList.remove('hidden');
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
+
+        function updateWeatherUI(data) {
+            document.getElementById('temperature').textContent = `${Math.round(data.main.temp)}°C`;
+            document.getElementById('cityName').textContent = data.name;
+            document.getElementById('weatherDescription').textContent = data.weather[0].description;
+            document.getElementById('humidity').textContent = `${data.main.humidity}%`;
+            document.getElementById('windSpeed').textContent = `${Math.round(data.wind.speed * 3.6)} km/h`;
+            document.getElementById('pressure').textContent = `${data.main.pressure} hPa`;
+            document.getElementById('cloudiness').textContent = `${data.clouds.all}%`;
+            document.getElementById('visibility').textContent = `${(data.visibility / 1000).toFixed(1)} km`;
+
+            // Check for alerts
+            if (data.alerts && data.alerts.length > 0) {
+                const alertsContainer = document.getElementById('alerts');
+                const alertsData = document.getElementById('alertsData');
+                alertsContainer.classList.remove('hidden');
+                alertsData.innerHTML = data.alerts.map(alert => `
+                    <div class="mb-2">
+                        <strong>${alert.event}</strong>: ${alert.description}
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('alerts').classList.add('hidden');
+            }
+        }
+
+        function updateForecastUI(data) {
+            const forecastContainer = document.getElementById('forecastData');
+            forecastContainer.innerHTML = '';
+
+            const groupedForecast = data.list.reduce((acc, item) => {
+                const date = new Date(item.dt * 1000).toDateString();
+                if (!acc[date]) {
+                    acc[date] = [];
+                }
+                acc[date].push(item);
+                return acc;
+            }, {});
+
+            // 5 days forecast
+            Object.entries(groupedForecast).slice(0, 5).forEach(([date, forecasts]) => {
+                const dayForecast = forecasts[Math.floor(forecasts.length / 2)]; // Mid-day forecast
+                const forecastEl = document.createElement('div');
+                forecastEl.className = 'bg-white bg-opacity-20 rounded-lg p-4 text-white';
+                forecastEl.innerHTML = `
+                    <div class="font-semibold">${new Date(date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                    <div class="text-3xl font-bold my-2">${Math.round(dayForecast.main.temp)}°C</div>
+                    <div>${dayForecast.weather[0].description}</div>
+                `;
+                forecastContainer.appendChild(forecastEl);
+            });
+        }
+
+    </script>
+</body>
+</html>
